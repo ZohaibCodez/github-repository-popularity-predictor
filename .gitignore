@@ -104,7 +104,10 @@ $RECYCLE.BIN/
 models/checkpoints/
 models/saved_models/
 models/*.h5
-models/*.pkl
+# models/*.pkl  # Commented out - need pkl files for deployment
+# Exclude large model files (use Git LFS or retrain with max_depth limit)
+models/random_forest.pkl
+models/gradient_boosting.pkl
 models/*.joblib
 models/*.pt
 models/*.pth
