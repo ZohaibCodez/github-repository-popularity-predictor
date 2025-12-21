@@ -1,0 +1,10 @@
+[build-system]
+requires = ["setuptools>=40.8.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "github-repository-popularity-predictor"
+version = "0.1.0"
+description = "GitHub Repository Popularity Predictor"
+requires-python = ">=3.9,<3.14"
+dependencies = []
