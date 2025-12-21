@@ -15,7 +15,7 @@ st.set_page_config(
     page_title="GitHub Repository Popularity Predictor",
     page_icon="⭐",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="auto"  # Auto-collapse on mobile
 )
 
 # Custom CSS for enhanced UI/UX
@@ -29,9 +29,26 @@ st.markdown("""
         font-family: 'Poppins', sans-serif;
     }
     
+    /* Responsive Typography */
+    html {
+        font-size: 16px;
+    }
+    
+    @media (max-width: 768px) {
+        html {
+            font-size: 14px;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        html {
+            font-size: 12px;
+        }
+    }
+    
     /* Headers */
     .main-header {
-        font-size: 3.5rem;
+        font-size: clamp(2rem, 5vw, 3.5rem);
         font-weight: 700;
         text-align: center;
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -39,10 +56,11 @@ st.markdown("""
         -webkit-text-fill-color: transparent;
         margin-bottom: 1rem;
         animation: fadeInDown 1s ease-in;
+        padding: 0 1rem;
     }
     
     .sub-header {
-        font-size: 1.8rem;
+        font-size: clamp(1.2rem, 3vw, 1.8rem);
         font-weight: 600;
         color: #2c3e50;
         margin-top: 2rem;
@@ -54,11 +72,13 @@ st.markdown("""
     /* Metric Cards */
     .metric-card {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        padding: 2rem;
+        padding: clamp(1rem, 3vw, 2rem);
         border-radius: 15px;
         box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         transition: transform 0.3s ease, box-shadow 0.3s ease;
         color: white;
+        width: 100%;
+        box-sizing: border-box;
     }
     
     .metric-card:hover {
@@ -72,11 +92,22 @@ st.markdown("""
         color: white;
         border: none;
         border-radius: 25px;
-        padding: 0.75rem 2rem;
+        padding: clamp(0.5rem, 2vw, 0.75rem) clamp(1rem, 4vw, 2rem);
         font-weight: 600;
-        font-size: 1rem;
+        font-size: clamp(0.875rem, 2vw, 1rem);
         transition: all 0.3s ease;
         box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    @media (max-width: 768px) {
+        .stButton>button {
+            padding: 0.6rem 1rem;
+            font-size: 0.9rem;
+        }
     }
     
     .stButton>button:hover {
@@ -101,16 +132,78 @@ st.markdown("""
     /* Cards */
     .prediction-card {
         background: white;
-        padding: 2.5rem;
+        padding: clamp(1rem, 3vw, 2.5rem);
         border-radius: 20px;
         box-shadow: 0 10px 40px rgba(0,0,0,0.1);
         margin: 1rem 0;
         border: 1px solid #f0f0f0;
         transition: all 0.3s ease;
+        width: 100%;
+        box-sizing: border-box;
     }
     
     .prediction-card:hover {
         box-shadow: 0 15px 50px rgba(0,0,0,0.15);
+    }
+    
+    /* Responsive Containers */
+    .stMarkdown, .stDataFrame, .stPlotlyChart {
+        width: 100%;
+        overflow-x: auto;
+    }
+    
+    /* Mobile Optimizations */
+    @media (max-width: 768px) {
+        .main {
+            padding: 1rem 0.5rem;
+        }
+        
+        .stDataFrame {
+            font-size: 0.85rem;
+        }
+        
+        /* Stack columns on mobile */
+        [data-testid="column"] {
+            min-width: 100% !important;
+            flex: 1 1 100% !important;
+        }
+        
+        /* Adjust sidebar */
+        [data-testid="stSidebar"] {
+            width: 100%;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .prediction-card {
+            padding: 1rem;
+            margin: 0.5rem 0;
+        }
+        
+        .stButton>button {
+            font-size: 0.85rem;
+            padding: 0.5rem 0.75rem;
+        }
+    }
+    
+    /* Responsive Images & Charts */
+    img, .stPlotlyChart, .stImage {
+        max-width: 100%;
+        height: auto;
+    }
+    
+    /* Responsive Tables */
+    .dataframe {
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+    }
+    
+    .dataframe thead th {
+        position: sticky;
+        top: 0;
+        background: white;
+        z-index: 10;
     }
     
     /* Animations */
