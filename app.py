@@ -524,7 +524,7 @@ def show_dataset_overview(df):
     
     # Data preview
     st.markdown("### 🔍 Data Preview")
-    st.dataframe(df.head(10), use_container_width=True)
+    st.dataframe(df.head(10), width="stretch")
     
     # Data types
     st.markdown("### 📋 Data Types")
@@ -538,11 +538,11 @@ def show_dataset_overview(df):
             'Non-Null': df.count(),
             'Null': df.isnull().sum()
         })
-        st.dataframe(info_df, use_container_width=True)
+        st.dataframe(info_df, width="stretch")
     
     with col2:
         st.write("**Summary Statistics**")
-        st.dataframe(df.describe().T, use_container_width=True)
+        st.dataframe(df.describe().T, width="stretch")
 
 def show_univariate_analysis(df):
     """Univariate analysis section"""
@@ -560,14 +560,14 @@ def show_univariate_analysis(df):
         fig = px.histogram(df, x=selected_feature, nbins=50, 
                           title=f"{selected_feature} Distribution",
                           color_discrete_sequence=['#1f77b4'])
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
     
     with col2:
         st.markdown(f"### Box Plot of {selected_feature}")
         fig = px.box(df, y=selected_feature, 
                     title=f"{selected_feature} Box Plot",
                     color_discrete_sequence=['#ff7f0e'])
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
     
     # Statistics
     st.markdown(f"### 📈 Statistics for {selected_feature}")
@@ -602,7 +602,7 @@ def show_bivariate_analysis(df):
                     title=f"{x_var} vs {y_var}",
                     trendline="ols",
                     color_discrete_sequence=['#2ca02c'])
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
     
     # Correlation
     corr = df[[x_var, y_var]].corr().iloc[0, 1]
@@ -622,7 +622,7 @@ def show_correlation_analysis(df):
                    color_continuous_scale='RdBu_r',
                    title="Correlation Heatmap")
     fig.update_layout(height=600)
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
     
     # Top correlations with Stars
     if 'Stars' in numerical_cols:
@@ -634,7 +634,7 @@ def show_correlation_analysis(df):
                     title="Feature Correlations with Stars",
                     color=star_corr.values,
                     color_continuous_scale='RdYlGn')
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
 def show_distribution_analysis(df):
     """Distribution analysis section"""
@@ -664,7 +664,7 @@ def show_distribution_analysis(df):
         
         fig.update_layout(height=300 * ((len(selected_features) + 1) // 2), 
                          showlegend=False)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
 def show_language_analysis(df):
     """Language analysis section"""
@@ -687,13 +687,13 @@ def show_language_analysis(df):
                     title="Top Languages by Repository Count",
                     color=top_langs.values,
                     color_continuous_scale='Viridis')
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
     
     with col2:
         st.markdown("### Language Distribution (Pie Chart)")
         fig = px.pie(values=top_langs.values, names=top_langs.index,
                     title="Language Distribution")
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
     
     # Stars by language
     if 'Stars' in df.columns:
@@ -704,7 +704,7 @@ def show_language_analysis(df):
                     title="Average Stars by Language",
                     color='mean',
                     color_continuous_scale='Blues')
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
 def show_missing_values(df):
     """Missing values analysis"""
@@ -723,7 +723,7 @@ def show_missing_values(df):
     
     with col1:
         st.markdown("### Missing Values Table")
-        st.dataframe(missing_df, use_container_width=True)
+        st.dataframe(missing_df, width="stretch")
     
     with col2:
         st.markdown("### Missing Values Visualization")
@@ -732,7 +732,7 @@ def show_missing_values(df):
                     title="Missing Values by Column",
                     color='Missing %',
                     color_continuous_scale='Reds')
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
 def show_outlier_analysis(df):
     """Outlier detection analysis"""
@@ -760,7 +760,7 @@ def show_outlier_analysis(df):
     
     # Visualization
     fig = px.box(df, y=selected_feature, title=f"Outliers in {selected_feature}")
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
 
 def show_model(df, models):
     """Model and predictions page"""
@@ -815,7 +815,10 @@ def show_model_performance(models):
         ]
     }
     
-    st.dataframe(pd.DataFrame(model_results), use_container_width=True)
+    # Convert to DataFrame and ensure proper types
+    models_df = pd.DataFrame(model_results)
+    models_df = models_df.astype(str)  # Convert all to string to avoid Arrow serialization issues
+    st.dataframe(models_df, width="stretch")
     
     # Feature importance
     st.markdown("### 🎯 Features Used")
@@ -823,7 +826,7 @@ def show_model_performance(models):
         features_df = pd.DataFrame({
             'Feature': metadata['features']
         })
-        st.dataframe(features_df, use_container_width=True)
+        st.dataframe(features_df, width="stretch")
 
 def show_predictions(models):
     """Make predictions page"""
@@ -861,16 +864,16 @@ def show_predictions(models):
     col_ex1, col_ex2, col_ex3, col_ex4 = st.columns(4)
     
     with col_ex1:
-        if st.button("🌱 Small Project", use_container_width=True):
+        if st.button("🌱 Small Project", width="stretch"):
             st.session_state.example = "small"
     with col_ex2:
-        if st.button("⭐ Growing Project", use_container_width=True):
+        if st.button("⭐ Growing Project", width="stretch"):
             st.session_state.example = "growing"
     with col_ex3:
-        if st.button("🔥 Popular Project", use_container_width=True):
+        if st.button("🔥 Popular Project", width="stretch"):
             st.session_state.example = "popular"
     with col_ex4:
-        if st.button("🚀 Viral Project", use_container_width=True):
+        if st.button("🚀 Viral Project", width="stretch"):
             st.session_state.example = "viral"
     
     # Set default values based on example
@@ -1013,7 +1016,7 @@ def show_predictions(models):
                                    title='Comparison with Dataset',
                                    color='Stars', color_continuous_scale='Viridis')
                         fig.update_layout(showlegend=False, height=300)
-                        st.plotly_chart(fig, use_container_width=True)
+                        st.plotly_chart(fig, width="stretch")
                     
                     # Insights
                     st.markdown("### 💡 Insights & Recommendations")
@@ -1050,7 +1053,7 @@ def show_predictions(models):
                                     '✓' if has_issues else '✗',
                                     '✓' if has_projects else '✗']
                         })
-                        st.dataframe(input_summary, use_container_width=True, hide_index=True)
+                        st.dataframe(input_summary, width="stretch", hide_index=True)
                     
                     with col2:
                         st.markdown("**💭 Impact Analysis:**")
